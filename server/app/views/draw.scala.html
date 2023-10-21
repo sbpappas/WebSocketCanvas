@@ -1,6 +1,7 @@
-
+@()(implicit request: RequestHeader)
 @main("Draw Something!") {
 
+    <input type = "hidden" id="ws-route" value = @routes.WebController.getSocket.absoluteURL()>
     <h2>Draw with your friends below</h2>
   
     <canvas id="drawCanvas" width="1000" height="1000" style="border: 2px solid black;"></canvas>

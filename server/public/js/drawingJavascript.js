@@ -1,11 +1,13 @@
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
+const socketRoute = document.getElementById("ws-route").value;
+const socket = new WebSocket(socketRoute.replace("http", "ws"));
 
 // Load the user image
 const userImage = new Image();
 userImage.src = "/assets/images/awesome-face-png-1.png"; // Update the image path
-userImage.height = 10; // Desired width of the user image
-userImage.width = 10; // Desired height of the user image
+userImage.height = 50; // Desired width of the user image
+userImage.width = 50; // Desired height of the user image
 
 let userX = canvas.width / 2; // Initial user position X
 let userY = canvas.height / 2; // Initial user position Y
