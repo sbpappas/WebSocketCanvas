@@ -60,6 +60,10 @@ onkeydown = (event) =>{
 }
 
 socket.onmessage = (event) => {
-   var xyCoordinates = event.data.split(':');
-   println(xyCoordinates[0])
-}
+  const xyCoordinates = event.data.split(':');
+  if (xyCoordinates.length === 2) {
+    userX = parseInt(xyCoordinates[0]);
+    userY = parseInt(xyCoordinates[1]);
+    drawUser();
+  }
+};

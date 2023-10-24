@@ -7,6 +7,7 @@ import MovingActor._
 
 class MovingActor(out: ActorRef, manager: ActorRef) extends Actor {
     manager ! moveManager.NewMover(self)
+    
 
     def receive = {
         case s: String => manager ! moveManager.Coordinates(s)
