@@ -9,17 +9,20 @@ import akka.actor.Actor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import play.api.libs.streams.ActorFlow
+import actors.MovingActor
+import actors.moveManager
+import akka.actor.Props
 
 @Singleton
 class WebController @Inject()(cc: ControllerComponents)(implicit system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
 
+  val manager = system.actorOf(Props[moveManager], "Manager")
   def draw = Action { implicit request =>
     Ok(views.html.draw())
   }
   def getSocket = WebSocket.accept[String, String]{ request =>//not strings
-    println("getting socket")
     ActorFlow.actorRef {out=>
-        ???    
+        MovingActor.props(out, manager)    
     }  
   }
 }

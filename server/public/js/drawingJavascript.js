@@ -3,14 +3,19 @@ const ctx = canvas.getContext("2d");
 const socketRoute = document.getElementById("ws-route").value;
 const socket = new WebSocket(socketRoute.replace("http", "ws"));
 
+
+
+//socket.onopen = () => socket.send("Test message");
+  
+
 // Load the user image
 const userImage = new Image();
 userImage.src = "/assets/images/awesome-face-png-1.png"; // Update the image path
 userImage.height = 50; // Desired width of the user image
 userImage.width = 50; // Desired height of the user image
 
-let userX = canvas.width / 2; // Initial user position X
-let userY = canvas.height / 2; // Initial user position Y
+let userX = Math.round(canvas.width / 2* Math.random()); // Initial user position X
+let userY = Math.round(canvas.height / 2 * Math.random()); // Initial user position Y
 const userSpeed = 10; // Adjust the user movement speed
 
 // Event listener for arrow key presses
@@ -47,3 +52,14 @@ function drawUser() {
 userImage.onload = () => {
   drawUser();
 };
+
+socket.onopen = () => socket.send("New user connected");
+
+onkeydown = (event) =>{
+  socket.send((userX + ":" + userY));
+}
+
+socket.onmessage = (event) => {
+   var xyCoordinates = event.data.split(':');
+   println(xyCoordinates[0])
+}
