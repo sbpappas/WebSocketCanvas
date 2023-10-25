@@ -2,6 +2,7 @@ const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const socketRoute = document.getElementById("ws-route").value;
 const socket = new WebSocket(socketRoute.replace("http", "ws"));
+console.log("starting");
 
 
 
@@ -59,7 +60,9 @@ onkeydown = (event) =>{
   socket.send((userX + ":" + userY));
 }
 
+
 socket.onmessage = (event) => {
+  console.log("got message");
   const xyCoordinates = event.data.split(':');
   if (xyCoordinates.length === 2) {
     userX = parseInt(xyCoordinates[0]);

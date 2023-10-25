@@ -12,6 +12,7 @@ import play.api.libs.streams.ActorFlow
 import actors.MovingActor
 import actors.moveManager
 import akka.actor.Props
+import java.util.UUID
 
 @Singleton
 class WebController @Inject()(cc: ControllerComponents)(implicit system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
@@ -20,9 +21,10 @@ class WebController @Inject()(cc: ControllerComponents)(implicit system: ActorSy
   def draw = Action { implicit request =>
     Ok(views.html.draw())
   }
-  def getSocket = WebSocket.accept[String, String]{ request =>//not strings
-    ActorFlow.actorRef {out=>
-        MovingActor.props(out, manager)    
+  def getSocket = WebSocket.accept[String, String]{ request =>
+    val userId = UUID.randomUUID().toString
+    ActorFlow.actorRef { out=>
+        MovingActor.props(out, manager, userId)    
     }  
   }
 }
