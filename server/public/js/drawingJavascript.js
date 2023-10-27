@@ -4,11 +4,8 @@ const socketRoute = document.getElementById("ws-route").value;
 const socket = new WebSocket(socketRoute.replace("http", "ws"));
 console.log("starting");
 
-
-
 //socket.onopen = () => socket.send("Test message");
   
-
 // Load the user image
 const userImage = new Image();
 userImage.src = "/assets/images/awesome-face-png-1.png"; // Update the image path
@@ -23,16 +20,24 @@ const userSpeed = 10; // Adjust the user movement speed
 document.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "ArrowLeft":
-      userX -= userSpeed;
+      if (userX > 0){
+        userX -= userSpeed;
+      }
       break;
     case "ArrowRight":
-      userX += userSpeed;
+      if (userX < 900){
+        userX += userSpeed;
+      }
       break;
     case "ArrowUp":
-      userY -= userSpeed;
+      if (userY > 0){
+        userY -= userSpeed;
+      }
       break;
     case "ArrowDown":
-      userY += userSpeed;
+      if (userY < 300){
+        userY += userSpeed;
+      }
       break;
   }
   drawUser();
@@ -62,7 +67,7 @@ onkeydown = (event) =>{
 
 
 socket.onmessage = (event) => {
-  console.log("got message");
+  console.log("got message"); //I am not currently gettting this printout
   const xyCoordinates = event.data.split(':');
   if (xyCoordinates.length === 2) {
     userX = parseInt(xyCoordinates[0]);

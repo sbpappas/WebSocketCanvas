@@ -21,10 +21,12 @@ class moveManager extends Actor {
     }
     
     def broadCastCoordinates(senderUserId: String, coor: String): Unit = {
+        println("in broadcastcoor")
         movers.foreach { 
             case (userId, mover) if userId != senderUserId =>
                 println("broadcast coordinates to all")
-                mover ! SendCoordinates(coor)
+                mover ! SendCoordinates
+                //mover ! movingActor.SendCoordinates
             case m => println("unhandled broadcast error")
         }
     }

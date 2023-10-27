@@ -4,7 +4,7 @@ import akka.actor.Actor
 import akka.actor.Props
 import akka.actor.ActorRef
 import MovingActor._
-import java.net.CookieHandler
+import java.net.CookieHandler 
 import play.api.libs.json._
 
 
@@ -24,8 +24,8 @@ class MovingActor(out: ActorRef, manager: ActorRef, userId: String) extends Acto
                 println("got message: " + x + ", " + y)
                 //manager ! MovingActor.SendCoordinates
             }
-        //case SendCoordinates => out ! s"$userX:$userY"
-        case SendCoordinates(coor) => out ! coor
+        case SendCoordinates => out ! s"$userX:$userY"
+        //case SendCoordinates(coor) => out ! coor
         case m => println("Unhandled message in MovingActor: " + m)
     }
 } 
@@ -34,5 +34,7 @@ object MovingActor {
     def props(out: ActorRef, manager: ActorRef, userId: String) = Props(new MovingActor(out, manager, userId)) 
 
     case class Coordinates(x: Double, y: Double)
-    case class SendCoordinates(coor: String)
+    //case class SendCoordinates(coor: String)
+    case object SendCoordinates
+
 }
