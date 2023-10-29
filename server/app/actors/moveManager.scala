@@ -11,14 +11,28 @@ class moveManager extends Actor {
     import moveManager._
 
     def receive = {
-        case NewMover(mover, userId) => 
-            broadCastCoordinates(userId, "200:200") //what should i put here instead?
+        case NewMover(mover, userId) =>
+            movers += (userId -> mover)
+            // Initialize the user's position.
+            mover ! SendCoordinates
             println("new mover")
-        case Coordinates(userId, x, y) => 
+        case Coordinates(userId, x, y) =>
             broadCastCoordinates(userId, s"$x:$y")
-            println("broadcast")
+            println("broadcasted")
+        case SendCoordinates =>
+            // Ignore the SendCoordinates message, as it's not needed here.
         case m => println("Unhandled message in Move Manager: " + m)
     }
+
+    def broadCastCoordinates(senderUserId: String, coor: String): Unit = {
+        println("broadcast " + s"$coor")
+        for {(userId, mover) <- movers if userId != senderUserId} {
+            println("broadcast coordinates to all")
+            mover ! SendCoordinates
+        }
+    }
+}
+/*
     
     def broadCastCoordinates(senderUserId: String, coor: String): Unit = {
         println("in broadcastcoor")
@@ -30,7 +44,7 @@ class moveManager extends Actor {
             case m => println("unhandled broadcast error")
         }
     }
-}
+}*/
 
 object moveManager{
     case class NewMover(mover: ActorRef, userId: String)
