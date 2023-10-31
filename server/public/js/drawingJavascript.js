@@ -52,7 +52,7 @@ function clearCanvas() {
 
 // Function to draw the user image
 function drawUser() {
-  clearCanvas();
+  //clearCanvas();
   ctx.drawImage(userImage, userX, userY);
 }
 
@@ -70,12 +70,17 @@ onkeydown = (event) =>{
 socket.onmessage = (event) => {
   console.log("got message"); 
   console.log(event.data);
-  const xyCoordinates = event.data.split(';'); // Modify the split delimiter
-  if (xyCoordinates.length === 2) {
-    const x = parseFloat(xyCoordinates[0]); // Use parseFloat for double values
-    const y = parseFloat(xyCoordinates[1]);
-    userX = x; // Set the userX and userY with the parsed values
-    userY = y;
-    drawUser();
-  }
+  clearCanvas();
+  const allCoordinate = event.data.split(' ')
+    for (const i of allCoordinate) {
+      const xyCoordinates = i.split(':'); // Modify the split delimiter
+      if (xyCoordinates.length === 2) {
+        const x = parseFloat(xyCoordinates[0]); // Use parseFloat for double values
+        const y = parseFloat(xyCoordinates[1]);
+        userX = x; // Set the userX and userY with the parsed values
+        userY = y;
+        drawUser();
+      }
+    
+    }
 };

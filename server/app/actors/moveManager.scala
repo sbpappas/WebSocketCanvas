@@ -4,37 +4,44 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import MovingActor.SendCoordinates
 import akka.actor.Props
+import scala.collection.mutable.Map
 
 
 class moveManager extends Actor {
     private var movers = Map.empty[String, ActorRef] //[userid, mover, coor]
+    private var locations = Map.empty[ActorRef, String]
 
     import moveManager._
 
     def receive = {
-        case NewMover(mover, userId) =>
+        case NewMover(mover, userId, loc) =>
             //movers += (userId -> mover, "0.0:0.0")
+            locations += (mover -> loc)
             movers+=(userId -> mover)
             // Initialize the user's position.
             mover ! SendCoordinates("0.0:0.0")
             println("new mover")
-        case Coordinates(userId, x, y) =>
-            
+        case Coordinates(userId, x, y, userRef) =>
+            //locations(userRef) = s"$x:$y" //update the location of the image that just moved
+            locations(userRef) = s"$x:$y"
             broadCastCoordinates(userId, s"$x:$y")
             println("broadcasted")
         case SendCoordinates(coor) =>
-            println("error: in manager sendcoordinates")
+            println("error: in manager sendcoordinates") //dont use this
             // Ignore the SendCoordinates message, as it's not needed here.
         case m => println("Unhandled message in Move Manager: " + m)
     }
 
     def broadCastCoordinates(senderUserId: String, coor: String): Unit = {
         println("broadcast " + s"$coor")
-        //for {(userId, mover) <- movers if userId != senderUserId} {
+        //var coorlist = ""
+        //val coorList = locations.filterKeys(_ != senderUserId).values.mkString(" ")
+        val concatenatedString: String = locations.values.mkString(" ")
         for ((userId, mover) <- movers) {
             println("broadcast coordinates to all")
-            
-            mover ! SendCoordinates(coor)
+            //for ((userId, mover) <- movers) {
+                mover ! SendCoordinates(concatenatedString)
+            //}
         }
     }
 }
@@ -54,6 +61,6 @@ class moveManager extends Actor {
 }*/
 
 object moveManager{
-    case class NewMover(mover: ActorRef, userId: String)
-    case class Coordinates(userId: String, x: Double, y: Double)
+    case class NewMover(mover: ActorRef, userId: String, loc: String)
+    case class Coordinates(userId: String, x: Double, y: Double, userRef: ActorRef)
 }

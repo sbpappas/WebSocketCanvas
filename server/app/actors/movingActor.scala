@@ -30,9 +30,10 @@ import play.api.libs.json._
     }
 } */
 class MovingActor(out: ActorRef, manager: ActorRef, userId: String) extends Actor {
-    manager ! moveManager.NewMover(self, userId)
     private var userX: Double = 0
     private var userY: Double = 0
+    manager ! moveManager.NewMover(self, userId, s"$userX:$userY")
+
 
     def receive = {
         case s: String if s.contains(":") =>
@@ -42,7 +43,7 @@ class MovingActor(out: ActorRef, manager: ActorRef, userId: String) extends Acto
                 val y = coors(1).toDouble
                 userX = x
                 userY = y
-                manager ! moveManager.Coordinates(userId, x, y)
+                manager ! moveManager.Coordinates(userId, x, y, out)
                 println("got message: " + x + ", " + y)
             }
         case SendCoordinates(coor) =>
