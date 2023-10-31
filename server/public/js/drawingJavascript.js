@@ -12,8 +12,10 @@ userImage.src = "/assets/images/awesome-face-png-1.png"; // Update the image pat
 userImage.height = 50; // Desired width of the user image
 userImage.width = 50; // Desired height of the user image
 
-let userX = Math.round(canvas.width / 2* Math.random()); // Initial user position X
-let userY = Math.round(canvas.height / 2 * Math.random()); // Initial user position Y
+//let userX = Math.round(canvas.width / 2* Math.random()); // Initial user position X
+//let userY = Math.round(canvas.height / 2 * Math.random()); // Initial user position Y
+let userX = 0.0; // Initial user position X
+let userY = 0.0; // Initial user position Y
 const userSpeed = 10; // Adjust the user movement speed
 
 // Event listener for arrow key presses
@@ -65,13 +67,15 @@ onkeydown = (event) =>{
   socket.send((userX + ":" + userY));
 }
 
-
 socket.onmessage = (event) => {
-  console.log("got message"); //I am not currently gettting this printout
-  const xyCoordinates = event.data.split(':');
+  console.log("got message"); 
+  console.log(event.data);
+  const xyCoordinates = event.data.split(';'); // Modify the split delimiter
   if (xyCoordinates.length === 2) {
-    userX = parseInt(xyCoordinates[0]);
-    userY = parseInt(xyCoordinates[1]);
+    const x = parseFloat(xyCoordinates[0]); // Use parseFloat for double values
+    const y = parseFloat(xyCoordinates[1]);
+    userX = x; // Set the userX and userY with the parsed values
+    userY = y;
     drawUser();
   }
 };

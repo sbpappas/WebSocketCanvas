@@ -44,7 +44,6 @@ class MovingActor(out: ActorRef, manager: ActorRef, userId: String) extends Acto
                 userY = y
                 manager ! moveManager.Coordinates(userId, x, y)
                 println("got message: " + x + ", " + y)
-               // out ! s"$userX:$userY"
             }
         case SendCoordinates =>
             out ! s"$userX:$userY"
