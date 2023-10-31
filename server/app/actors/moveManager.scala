@@ -33,6 +33,7 @@ class moveManager extends Actor {
         //for {(userId, mover) <- movers if userId != senderUserId} {
         for ((userId, mover) <- movers) {
             println("broadcast coordinates to all")
+            
             mover ! SendCoordinates(coor)
         }
     }
