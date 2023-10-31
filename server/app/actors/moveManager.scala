@@ -16,13 +16,13 @@ class moveManager extends Actor {
             //movers += (userId -> mover, "0.0:0.0")
             movers+=(userId -> mover)
             // Initialize the user's position.
-            mover ! SendCoordinates
+            mover ! SendCoordinates("0.0:0.0")
             println("new mover")
         case Coordinates(userId, x, y) =>
             
             broadCastCoordinates(userId, s"$x:$y")
             println("broadcasted")
-        case SendCoordinates =>
+        case SendCoordinates(coor) =>
             println("error: in manager sendcoordinates")
             // Ignore the SendCoordinates message, as it's not needed here.
         case m => println("Unhandled message in Move Manager: " + m)
@@ -33,7 +33,7 @@ class moveManager extends Actor {
         //for {(userId, mover) <- movers if userId != senderUserId} {
         for ((userId, mover) <- movers) {
             println("broadcast coordinates to all")
-            mover ! SendCoordinates//(coor)
+            mover ! SendCoordinates(coor)
         }
     }
 }

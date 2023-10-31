@@ -45,8 +45,8 @@ class MovingActor(out: ActorRef, manager: ActorRef, userId: String) extends Acto
                 manager ! moveManager.Coordinates(userId, x, y)
                 println("got message: " + x + ", " + y)
             }
-        case SendCoordinates =>
-            out ! s"$userX:$userY"
+        case SendCoordinates(coor) =>
+            out ! coor
         case m => println("Unhandled message in MovingActor: " + m)
     }
 }
@@ -56,7 +56,7 @@ object MovingActor {
     def props(out: ActorRef, manager: ActorRef, userId: String) = Props(new MovingActor(out, manager, userId)) 
 
     case class Coordinates(x: Double, y: Double)
-    //case class SendCoordinates(coor: String)
-    case object SendCoordinates
+    case class SendCoordinates(coor: String)
+    //case object SendCoordinates
 
 }

@@ -70,7 +70,7 @@ onkeydown = (event) =>{
 socket.onmessage = (event) => {
   console.log("got message"); 
   console.log(event.data);
-  const xyCoordinates = event.data.split(';'); // Modify the split delimiter
+  const xyCoordinates = event.data.split(':'); // Modify the split delimiter
   if (xyCoordinates.length === 2) {
     const x = parseFloat(xyCoordinates[0]); // Use parseFloat for double values
     const y = parseFloat(xyCoordinates[1]);
