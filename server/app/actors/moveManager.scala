@@ -37,6 +37,7 @@ class moveManager extends Actor {
         //var coorlist = ""
         //val coorList = locations.filterKeys(_ != senderUserId).values.mkString(" ")
         val concatenatedString: String = locations.values.mkString(" ")
+        println(concatenatedString)
         for ((userId, mover) <- movers) {
             println("broadcast coordinates to all")
             //for ((userId, mover) <- movers) {
