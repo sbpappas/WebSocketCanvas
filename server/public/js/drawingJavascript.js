@@ -42,7 +42,7 @@ document.addEventListener("keydown", (e) => {
       }
       break;
   }
-  drawUser();
+  drawUser(userX, userY);
 });
 
 // Function to clear the canvas
@@ -51,14 +51,14 @@ function clearCanvas() {
 }
 
 // Function to draw the user image
-function drawUser() {
+function drawUser(x,y) {
   //clearCanvas();
-  ctx.drawImage(userImage, userX, userY);
+  ctx.drawImage(userImage, x, y);
 }
 
 // Load the user image and draw it initially
 userImage.onload = () => {
-  drawUser();
+  drawUser(userX, UserY);
 };
 
 socket.onopen = () => socket.send("New user connected");
@@ -77,9 +77,9 @@ socket.onmessage = (event) => {
       if (xyCoordinates.length === 2) {
         const x = parseFloat(xyCoordinates[0]); // Use parseFloat for double values
         const y = parseFloat(xyCoordinates[1]);
-        userX = x; // Set the userX and userY with the parsed values
-        userY = y;
-        drawUser();
+        // userX = x; // Set the userX and userY with the parsed values
+        // userY = y;
+        drawUser(x,y);
       }
     
     }

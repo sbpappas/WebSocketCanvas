@@ -25,7 +25,7 @@ class moveManager extends Actor {
             //locations(userRef) = s"$x:$y" //update the location of the image that just moved
             locations(userRef) = s"$x:$y"
             broadCastCoordinates(userId, s"$x:$y")
-            println("broadcasted")
+            //println("broadcasted")
         case SendCoordinates(coor) =>
             println("error: in manager sendcoordinates") //dont use this
             // Ignore the SendCoordinates message, as it's not needed here.
