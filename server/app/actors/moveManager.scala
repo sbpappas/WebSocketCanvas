@@ -14,12 +14,12 @@ class moveManager extends Actor {
     import moveManager._
 
     def receive = {
-        case NewMover(mover, userId, loc) =>
+        case NewMover(mover, userId, loc, out) =>
             //movers += (userId -> mover, "0.0:0.0")
-            locations += (mover -> loc)
+            locations += (out -> loc)
             movers+=(userId -> mover)
             // Initialize the user's position.
-            mover ! SendCoordinates("0.0:0.0")
+            mover ! SendCoordinates(loc)
             println("new mover")
         case Coordinates(userId, x, y, userRef) =>
             //locations(userRef) = s"$x:$y" //update the location of the image that just moved
@@ -34,8 +34,6 @@ class moveManager extends Actor {
 
     def broadCastCoordinates(senderUserId: String, coor: String): Unit = {
         println("broadcast " + s"$coor")
-        //var coorlist = ""
-        //val coorList = locations.filterKeys(_ != senderUserId).values.mkString(" ")
         val concatenatedString: String = locations.values.mkString(" ")
         println(concatenatedString)
         for ((userId, mover) <- movers) {
@@ -62,6 +60,6 @@ class moveManager extends Actor {
 }*/
 
 object moveManager{
-    case class NewMover(mover: ActorRef, userId: String, loc: String)
+    case class NewMover(mover: ActorRef, userId: String, loc: String, out: ActorRef)
     case class Coordinates(userId: String, x: Double, y: Double, userRef: ActorRef)
 }
